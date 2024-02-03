@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const complaintSchema = mongoose.Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
       ref: "user",
       required: true,
     },
@@ -18,19 +18,29 @@ const complaintSchema = mongoose.Schema(
     count: [
       {
         userId: {
-          type: String,
+          type: mongoose.Schema.ObjectId,
+          ref: "user",
           required: true,
+        },
+        vote: {
+          type: Number,
+          enum:[1,-1],
+          default: 0,
         },
       },
     ],
+    noOfVotes:{
+      type:Number,
+      default: 0
+    },
     status: {
       type: String,
       enum: ["pending", "inProgess", "resolved", "confirmed", "rejected"],
-      default:"pending"
+      default: "pending",
     },
   },
   { timestamps: true, expires: 60 * 60 * 24 * 365 * 5 }
 );
 
 export default mongoose.model.complaints ||
-  mongoose.model("complaint", complaintSchema);
+  mongoose.model("Complaint", complaintSchema);
